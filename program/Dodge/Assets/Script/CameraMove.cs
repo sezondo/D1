@@ -3,8 +3,6 @@ using UnityEngine;
 public class CameraMove : MonoBehaviour
 {
     public Transform player;
-    
-    
     public Vector3 offset;
     public float followSpeed = 5f;
     public float followThreshold = 0.5f;
@@ -36,7 +34,7 @@ public class CameraMove : MonoBehaviour
             transform.position,
             targetPos,
             followSpeed * Time.deltaTime
-        );
+            );
         }
         
     

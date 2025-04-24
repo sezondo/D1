@@ -9,18 +9,23 @@ public class PlayerContoroller : MonoBehaviour
 {
 
     public VariableJoystick j;
-
     private Rigidbody playerRigidbody;
     public float speed = 5f;
-    public float acceLeration = 15f;
     public float jumpForce = 20f;
-    private bool isGrounded = true;
-    
+    public bool isGrounded = true; //on시 땅에 닿아있음음
+    public bool playerRunEnable = false;
     public bool jumpTrg = false;
+    public float delayTimeSet = 0.5f;
+    public bool qTrigger = false;
     public float rotationSpeed = 5f;
+    public bool landing = false;
+    public bool falling = false;
+    private DelayTimer jumpDelayTimer = new DelayTimer();
+    
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
-    public Vector3 currentVelocity;
+    
 
     void Start()
     {
@@ -51,9 +56,34 @@ public class PlayerContoroller : MonoBehaviour
             targetVelocity.z
         );
 
+
+        // 애니메이션 작업
+
+        if (playerRigidbody.linearVelocity.y < -0.1f) 
+        {
+            falling = true;
+            landing = false;
+        }
+        else if (playerRigidbody.linearVelocity.y > 0.1f)
+        {
+            falling = false;
+            landing = false;
+        }else{
+            falling = false;
+            landing = true;
+        }
         
 
-        if (newVeiocity.sqrMagnitude > 0.01f)
+        if (newVeiocity.sqrMagnitude > 0.01f) 
+        {
+            playerRunEnable = true;
+        }else{
+            playerRunEnable = false;
+        }
+
+        
+
+        if (newVeiocity.sqrMagnitude > 0.2f)
         {
             Quaternion toRotation = Quaternion.LookRotation(newVeiocity, Vector3.up);// 타겟 방향 설정
             
@@ -63,13 +93,24 @@ public class PlayerContoroller : MonoBehaviour
             rotationSpeed * Time.deltaTime);//한번에 얼마나 회전할꺼냐?
         }
 
+        
 
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded && !qTrigger) // 자꾸 점프 씹혀서 여기다가 점프 트리거 작업업
         {
-            // 여기부터 작업
+            
             jumpTrg = true;
+            qTrigger = true;
+            
         }
         
+        if (qTrigger)// 점프 딜레이
+        {
+             if (jumpDelayTimer.Run(delayTimeSet))
+            {
+                qTrigger = false;
+            }
+        }
         
 
     }
@@ -91,7 +132,7 @@ public class PlayerContoroller : MonoBehaviour
             isGrounded = true;
         } 
     }
-
+    
     
 
     public void Die(){
@@ -101,5 +142,7 @@ public class PlayerContoroller : MonoBehaviour
 
         gameManager.EndGame();
     }
+
+    
 
 }
