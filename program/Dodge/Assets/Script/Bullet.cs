@@ -4,7 +4,7 @@ public class Bullet : MonoBehaviour
 {
 
     public float speed = 8f;
-
+    public GameObject effectPrefab;
     private Rigidbody rb;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -25,6 +25,7 @@ public class Bullet : MonoBehaviour
             if (playerContoroller != null)
             {
                 playerContoroller.Die();
+                Instantiate(effectPrefab, transform.position, transform.rotation);
             }
         }        
     }

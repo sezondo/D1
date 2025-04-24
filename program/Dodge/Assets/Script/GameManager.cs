@@ -21,6 +21,10 @@ public class GameManager : MonoBehaviour
         isGameover = false;
     }
 
+    public void Retry(){
+        SceneManager.LoadScene("SampleScene");
+    }
+
     // Update is called once per frame
     void Update()
     {
