@@ -37,9 +37,13 @@ public class CameraMove : MonoBehaviour
             );
         }
         
-    
+        Vector3 moveDir = player.forward;
+        moveDir.y = 0;
+        moveDir.Normalize();
 
-        //transform.position = player.position + offset;
+        
+
+        
 
     }
 

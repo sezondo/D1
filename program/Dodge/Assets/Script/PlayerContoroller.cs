@@ -21,6 +21,11 @@ public class PlayerContoroller : MonoBehaviour
     public bool landing = false;
     public bool falling = false;
     private DelayTimer jumpDelayTimer = new DelayTimer();
+    public AudioClip dieSound;
+    public AudioSource dieSoundSource;
+    public GameObject dieEffectPrefab;
+    public AudioClip jumpSound;
+    public AudioSource jumpSoundSource;
     
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -30,7 +35,8 @@ public class PlayerContoroller : MonoBehaviour
     void Start()
     {
         playerRigidbody = GetComponent<Rigidbody>();  
-       
+
+        
     }
 
     // Update is called once per frame
@@ -119,6 +125,8 @@ public class PlayerContoroller : MonoBehaviour
     {
         if (jumpTrg)      // 점프 구현
         {
+            jumpSoundSource.PlayOneShot(jumpSound); // 점프 소리나게 하기기
+
             playerRigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isGrounded = false;
             jumpTrg = false;
@@ -127,19 +135,29 @@ public class PlayerContoroller : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-       if (collision.gameObject.tag == "GameController")
+       if (collision.gameObject.tag == "Wall")
         {
             isGrounded = true;
         } 
     }
     
-    
+    public void playerDieSound(){
+        GameObject soundObj = new GameObject("DieSound");
+        AudioSource audio = soundObj.AddComponent<AudioSource>();
+        audio.clip = dieSound;
+        audio.Play();
+        Destroy(soundObj, dieSound.length);
+        GameObject playerDieeffect =  Instantiate(dieEffectPrefab, transform.position, transform.rotation);
+        Destroy(playerDieeffect, 0.3f);
+    }
 
     public void Die(){
+        
+        playerDieSound();
+
         gameObject.SetActive(false);
 
         GameManager gameManager = FindFirstObjectByType<GameManager>();
-
         gameManager.EndGame();
     }
 
