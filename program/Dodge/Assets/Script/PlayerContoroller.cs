@@ -1,6 +1,6 @@
 using TMPro;
 using Unity.Mathematics;
-using UnityEditor.ShaderGraph.Internal;
+//using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.XInput;
@@ -26,6 +26,7 @@ public class PlayerContoroller : MonoBehaviour
     public GameObject dieEffectPrefab;
     public AudioClip jumpSound;
     public AudioSource jumpSoundSource;
+    private ClearZone gameClaerSvae;
     
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -35,33 +36,33 @@ public class PlayerContoroller : MonoBehaviour
     void Start()
     {
         playerRigidbody = GetComponent<Rigidbody>();  
-
+        gameClaerSvae = FindFirstObjectByType<ClearZone>();
         
     }
 
     // Update is called once per frame
     void Update()
     {
-        
-        
-        float xInput = Input.GetAxis("Horizontal");
-        float zInput = Input.GetAxis("Vertical");
+        //float xInput = Input.GetAxis("Horizontal");
+        //float zInput = Input.GetAxis("Vertical");
 
-        //float xInput = j.Horizontal;
-        //float zInput = j.Vertical;
+        float xInput = j.Horizontal;
+        float zInput = j.Vertical;
 
         
-
+        
         Vector3 newVeiocity = new Vector3(xInput, 0f, zInput).normalized;
-
+        
         // 현재 y속도 유지 + xz 속도 덮어쓰기
         Vector3 targetVelocity = newVeiocity * speed;
-        playerRigidbody.linearVelocity = new Vector3(
-            targetVelocity.x,
-            playerRigidbody.linearVelocity.y,
-            targetVelocity.z
-        );
 
+        if (!gameClaerSvae.gameClear){
+            playerRigidbody.linearVelocity = new Vector3(
+                targetVelocity.x,
+                playerRigidbody.linearVelocity.y,
+                targetVelocity.z
+        );
+        }
 
         // 애니메이션 작업
 
@@ -78,8 +79,6 @@ public class PlayerContoroller : MonoBehaviour
             falling = false;
             landing = true;
         }
-        
-
         if (newVeiocity.sqrMagnitude > 0.01f) 
         {
             playerRunEnable = true;
@@ -110,7 +109,7 @@ public class PlayerContoroller : MonoBehaviour
             
         }
         
-        if (qTrigger)// 점프 딜레이
+        if (qTrigger && !gameClaerSvae.gameClear)// 점프 딜레이
         {
              if (jumpDelayTimer.Run(delayTimeSet))
             {
@@ -131,6 +130,15 @@ public class PlayerContoroller : MonoBehaviour
             isGrounded = false;
             jumpTrg = false;
         }
+    }
+    public void JumpButton()
+    {
+        if (isGrounded && !qTrigger)
+        {
+            qTrigger = true;
+            jumpTrg = true;
+        }
+        
     }
 
     void OnCollisionEnter(Collision collision)
@@ -160,7 +168,4 @@ public class PlayerContoroller : MonoBehaviour
         GameManager gameManager = FindFirstObjectByType<GameManager>();
         gameManager.EndGame();
     }
-
-    
-
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
 
-    public float speed = 8f;
+    public float speed = 12f;
     public GameObject effectPrefab;
     
     private Rigidbody rb;
