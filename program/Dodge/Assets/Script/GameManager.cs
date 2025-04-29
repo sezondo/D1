@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
     public GameObject gameoverText;
     public GameObject gameClearText;
     public GameObject reStartButton;
+    public GameObject joystick;
+    public GameObject jumpButton;
 
     public Text timeText;
     public Text textRecord;
@@ -39,10 +41,13 @@ public class GameManager : MonoBehaviour
             timeText.text = "Time: "+(int) surviveTime;
         }else
         {
+            /*
             if (Input.GetKeyDown(KeyCode.R))
             {
                 SceneManager.LoadScene(0);
             }
+            */
+            
         }
 
         if (gameClaerSvae.gameClear)
@@ -55,13 +60,16 @@ public class GameManager : MonoBehaviour
     public void EndGame(){
         gameoverText.SetActive(true);
         reStartButton.SetActive(true);
-        
+        jumpButton.SetActive(false);
+        joystick.SetActive(false);
     }
     public void GameClaer(){
 
         isGameover = true;
         gameClearText.SetActive(true);
         reStartButton.SetActive(true);
+        jumpButton.SetActive(false);
+        joystick.SetActive(false);
 
         float bestTime = PlayerPrefs.GetFloat("BestTime",0);
 
