@@ -27,7 +27,14 @@ public class PlayerContoroller : MonoBehaviour
     public AudioClip jumpSound;
     public AudioSource jumpSoundSource;
     private ClearZone gameClaerSvae;
-    
+    public bool AttackTRG = false;
+    public bool AttackTRGAni = false;
+    //private DelayTimer AttackyTimer = new DelayTimer();
+    private float attackRange = 2f;
+    private int damage = 60;
+    private float attackCooldown = 1.0f;
+    private LayerMask enemyLayer;
+    private float lastAttackTime = 0;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
@@ -37,12 +44,26 @@ public class PlayerContoroller : MonoBehaviour
     {
         playerRigidbody = GetComponent<Rigidbody>();  
         gameClaerSvae = FindFirstObjectByType<ClearZone>();
+        enemyLayer = LayerMask.GetMask("enemyLayer");
+        
         
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (AttackTRGAni)
+        {
+            AttackTRGAni = false;
+        }
+
+        if (AttackTRG && Time.time - lastAttackTime >= attackCooldown)
+        {
+            Attack();
+            lastAttackTime = Time.time;
+        }
+
+
         //float xInput = Input.GetAxis("Horizontal");
         //float zInput = Input.GetAxis("Vertical");
 
@@ -141,6 +162,12 @@ public class PlayerContoroller : MonoBehaviour
         
     }
 
+    public void AttackButton(){
+
+        AttackTRG = true;
+        
+    }
+
     void OnCollisionEnter(Collision collision)
     {
        if (collision.gameObject.tag == "Wall")
@@ -168,4 +195,21 @@ public class PlayerContoroller : MonoBehaviour
         GameManager gameManager = FindFirstObjectByType<GameManager>();
         gameManager.EndGame();
     }
+
+    public void Attack(){
+
+        AttackTRGAni = true;
+        AttackTRG = false;
+        Vector3 attackOrigin = transform.position + transform.forward *1.2f;
+
+        Collider[] hitEnemies = Physics.OverlapSphere(attackOrigin, attackRange, enemyLayer); //공격범위 반원 생성 attackOrigin 부터  attackRange 까지enemyLayer놈을 가져와라라
+
+        foreach (Collider enemy in hitEnemies){ // 가져온 배열중 있으면 enemy라는 이름을 부여해서 뚜시뚜시
+            Debug.Log("Hit: " + enemy.name);
+            enemy.GetComponent<EnemyHP>()?.TakeDamage(damage);
+        }
+
+    }
+
+    
 }

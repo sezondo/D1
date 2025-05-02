@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public GameObject reStartButton;
     public GameObject joystick;
     public GameObject jumpButton;
+    public GameObject Attack;
 
     public Text timeText;
     public Text textRecord;
@@ -62,6 +63,8 @@ public class GameManager : MonoBehaviour
         reStartButton.SetActive(true);
         jumpButton.SetActive(false);
         joystick.SetActive(false);
+        Attack.SetActive(false);
+
     }
     public void GameClaer(){
 
@@ -70,6 +73,7 @@ public class GameManager : MonoBehaviour
         reStartButton.SetActive(true);
         jumpButton.SetActive(false);
         joystick.SetActive(false);
+        Attack.SetActive(false);
 
         float bestTime = PlayerPrefs.GetFloat("BestTime",0);
 

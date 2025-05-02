@@ -1,35 +1,55 @@
 using UnityEngine;
+using UnityEngine.Android;
 
 public class AniController : MonoBehaviour
 {
 
-    public Animator anim;
+    public Animator playerAnim;
+
     public PlayerContoroller PlayerContoroller;
+    
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        anim = GetComponent<Animator>();
+        playerAnim = GetComponent<Animator>();
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        //플레이어 애니메이션션
         if (PlayerContoroller.jumpTrg)
         {
-            anim.SetTrigger("jump");
+            playerAnim.SetTrigger("jump");
         }
-        else anim.ResetTrigger("jump");
+        else playerAnim.ResetTrigger("jump");
         
         
-        anim.SetBool("stamding",PlayerContoroller.landing);
+        playerAnim.SetBool("stamding",PlayerContoroller.landing);
         
         
-        anim.SetBool("forward",PlayerContoroller.playerRunEnable);
+        playerAnim.SetBool("forward",PlayerContoroller.playerRunEnable);
 
         
-        anim.SetBool("fall",PlayerContoroller.falling);
+        playerAnim.SetBool("fall",PlayerContoroller.falling);
+        
+        if (PlayerContoroller.AttackTRGAni)
+        {
+            playerAnim.SetTrigger("attack");
+        }
+        else playerAnim.ResetTrigger("attack");
+
+        playerAnim.SetBool("attackReset",PlayerContoroller.AttackTRGAni);
+        
+        
+        
+
+
+
+        
+
         
         
 
