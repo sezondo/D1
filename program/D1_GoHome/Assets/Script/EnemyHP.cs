@@ -20,6 +20,8 @@ public class EnemyHP : MonoBehaviour
     }
      public void TakeDamage(int damage)
     {
+        if (EnemyDie) return;
+        
         currentHP -= damage;
         Debug.Log($"{gameObject.name} 피격! 남은 HP: {currentHP}");
 

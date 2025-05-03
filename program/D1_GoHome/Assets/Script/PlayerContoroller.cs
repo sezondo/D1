@@ -4,6 +4,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.XInput;
+using UnityEngine.UI;
 
 public class PlayerContoroller : MonoBehaviour
 {
@@ -35,6 +36,10 @@ public class PlayerContoroller : MonoBehaviour
     private float attackCooldown = 1.0f;
     private LayerMask enemyLayer;
     private float lastAttackTime = 0;
+    public int maxHP = 100;
+    public int currentHP;
+    public Slider hpSlider;
+    public bool playerDie = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
@@ -46,7 +51,9 @@ public class PlayerContoroller : MonoBehaviour
         gameClaerSvae = FindFirstObjectByType<ClearZone>();
         enemyLayer = LayerMask.GetMask("enemyLayer");
         
-        
+        currentHP = maxHP;
+        hpSlider.maxValue = maxHP;
+        hpSlider.value = currentHP;
     }
 
     // Update is called once per frame
@@ -175,6 +182,22 @@ public class PlayerContoroller : MonoBehaviour
             isGrounded = true;
         } 
     }
+
+    public void TakeDamage(int damage){
+        currentHP -= damage;
+
+        if (hpSlider != null)
+        {
+        hpSlider.value = currentHP;
+        }
+
+        Debug.Log("대미지받음");
+        if (currentHP <= 0)
+        {
+            currentHP = 0;
+            Die();
+        }
+    }
     
     public void playerDieSound(){
         GameObject soundObj = new GameObject("DieSound");
@@ -188,6 +211,7 @@ public class PlayerContoroller : MonoBehaviour
 
     public void Die(){
         
+        playerDie = true;
         playerDieSound();
 
         gameObject.SetActive(false);

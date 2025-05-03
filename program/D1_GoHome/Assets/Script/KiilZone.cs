@@ -10,7 +10,7 @@ public class KiilZone : MonoBehaviour
             
             if (playerContoroller != null)
             {
-                playerContoroller.Die();
+                playerContoroller.TakeDamage(999);
             }
         }
     }

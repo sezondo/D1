@@ -9,6 +9,7 @@ public class Bullet : MonoBehaviour
     private Rigidbody rb;
     public AudioClip effectSound;
     public AudioSource effectSoundSource;
+    private int Damage = 200;
     
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -37,7 +38,7 @@ public class Bullet : MonoBehaviour
             
             if (playerContoroller != null)
             {
-                playerContoroller.Die();
+                playerContoroller.TakeDamage(Damage);
                 Destroy(gameObject,0.01f);
             }
         }
