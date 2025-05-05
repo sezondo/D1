@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
+using System.Collections;
 
 public class EnemyAttack : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class EnemyAttack : MonoBehaviour
     private DelayTimer attackDelay = new DelayTimer();
     public PlayerContoroller playerContoroller;
     public EnemyHP enemyHP;
+    public AudioClip attackSound;
+    public AudioSource attackSoundSource;
 
     void Start()
     {
@@ -45,12 +48,32 @@ public class EnemyAttack : MonoBehaviour
         Debug.Log("적이 나를 공격함");
         navStop = true;
         enemyAttackAni = true;
+        attackSoundSource.PlayOneShot(attackSound); 
+
+        StartCoroutine(DelayedDamage(0.5f));
+
+        /*var playerController = player.GetComponent<PlayerContoroller>();
+        if (playerController != null)
+        {
+            
+            playerController.TakeDamage(attackDamage);
+            
+           // transform.LookAt(player.transform); // 시1234발럼 버그 개123시1발
+            
+        }
+        */
+         
+    }
+    private IEnumerator DelayedDamage(float delay)
+    {
+        yield return new WaitForSeconds(delay);
 
         var playerController = player.GetComponent<PlayerContoroller>();
         if (playerController != null)
         {
-           // transform.LookAt(player.transform); // 시1234발럼 버그 개123시1발
             playerController.TakeDamage(attackDamage);
         }
     }
+
+
 }

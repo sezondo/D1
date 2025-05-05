@@ -33,13 +33,16 @@ public class PlayerContoroller : MonoBehaviour
     //private DelayTimer AttackyTimer = new DelayTimer();
     private float attackRange = 2f;
     private int damage = 60;
-    private float attackCooldown = 1.0f;
+    private float attackCooldown = 1.5f;
     private LayerMask enemyLayer;
     private float lastAttackTime = 0;
     public int maxHP = 100;
     public int currentHP;
     public Slider hpSlider;
     public bool playerDie = false;
+
+    public AudioClip attackSound;
+    public AudioSource attackSoundSource;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
@@ -225,6 +228,8 @@ public class PlayerContoroller : MonoBehaviour
         AttackTRGAni = true;
         AttackTRG = false;
         Vector3 attackOrigin = transform.position + transform.forward *1.2f;
+
+        attackSoundSource.PlayOneShot(attackSound); 
 
         Collider[] hitEnemies = Physics.OverlapSphere(attackOrigin, attackRange, enemyLayer); //공격범위 반원 생성 attackOrigin 부터  attackRange 까지enemyLayer놈을 가져와라라
 
