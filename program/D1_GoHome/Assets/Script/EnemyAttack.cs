@@ -30,7 +30,7 @@ public class EnemyAttack : MonoBehaviour
         
         float dist = Vector3.Distance(transform.position, player.transform.position);
 
-        if (Time.time - lastAttackTime >= attackCooldown && playerContoroller.playerDie == false && !enemyHP.EnemyDie)
+        if (Time.time - lastAttackTime >= attackCooldown && !playerContoroller.playerDie && !enemyHP.EnemyDie)
         {
             navStop = false;
             if (dist <= attackRange)
@@ -48,7 +48,7 @@ public class EnemyAttack : MonoBehaviour
         Debug.Log("적이 나를 공격함");
         navStop = true;
         enemyAttackAni = true;
-        attackSoundSource.PlayOneShot(attackSound); 
+        attackSoundSource.PlayOneShot(attackSound); //오디오 재생생
 
         StartCoroutine(DelayedDamage(0.5f));
 

@@ -23,7 +23,7 @@ public class EnemyHP : MonoBehaviour
         if (EnemyDie) return;
         
         currentHP -= damage;
-        Debug.Log($"{gameObject.name} 피격! 남은 HP: {currentHP}");
+        //Debug.Log($"{gameObject.name} 피격! 남은 HP: {currentHP}");
 
         if (currentHP <= 0)
         {
@@ -43,7 +43,7 @@ public class EnemyHP : MonoBehaviour
     {
         EnemyDie = true;
         EnemyDieSound();
-        Debug.Log($"{gameObject.name} 사망!");
+        //Debug.Log($"{gameObject.name} 사망!");
         Destroy(gameObject, 5f);
     }
 

@@ -33,11 +33,12 @@ public class BulletSpawner : MonoBehaviour
         timeAfterSpawn += Time.deltaTime;
 
         Vector3 dir = target.position - currentTransform.position;
+        dir.y = 0; //수평거리 계산함 
         float distance = dir.magnitude;
-        dir.y = 0;
+        
 
         if(distance <= fireRange && dir != Vector3.zero){
-            Quaternion targetRot = Quaternion.LookRotation(dir);
+            Quaternion targetRot = Quaternion.LookRotation(dir); // LookRotation 은 z축
             currentTransform.rotation = Quaternion.Lerp(currentTransform.rotation, targetRot, Time.deltaTime * rotationalSpeed);
         }
 

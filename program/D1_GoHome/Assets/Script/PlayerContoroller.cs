@@ -9,20 +9,20 @@ using UnityEngine.UI;
 public class PlayerContoroller : MonoBehaviour
 {
 
-    public VariableJoystick j;
+    public VariableJoystick j; //VariableJoystick 는 모바일 조이스틱 입력을 처리해주는 변수임
     private Rigidbody playerRigidbody;
     public float speed = 5f;
     public float jumpForce = 20f;
     public bool isGrounded = true; //on시 땅에 닿아있음음
-    public bool playerRunEnable = false;
+    public bool playerRunEnable = false; // 이짝은 애니메이션쪽쪽
     public bool jumpTrg = false;
     public float delayTimeSet = 0.5f;
     public bool qTrigger = false;
-    public float rotationSpeed = 5f;
+    public float rotationSpeed = 5f; //회전속도
     public bool landing = false;
     public bool falling = false;
-    private DelayTimer jumpDelayTimer = new DelayTimer();
-    public AudioClip dieSound;
+    private DelayTimer jumpDelayTimer = new DelayTimer();//유틸함수수
+    public AudioClip dieSound;//사운드쪽쪽
     public AudioSource dieSoundSource;
     public GameObject dieEffectPrefab;
     public AudioClip jumpSound;
@@ -31,14 +31,14 @@ public class PlayerContoroller : MonoBehaviour
     public bool AttackTRG = false;
     public bool AttackTRGAni = false;
     //private DelayTimer AttackyTimer = new DelayTimer();
-    private float attackRange = 2f;
+    private float attackRange = 1.5f;
     private int damage = 60;
     private float attackCooldown = 1.5f;
     private LayerMask enemyLayer;
     private float lastAttackTime = 0;
     public int maxHP = 100;
     public int currentHP;
-    public Slider hpSlider;
+    public Slider hpSlider; //이거 hp바 ui 변수임
     public bool playerDie = false;
 
     public AudioClip attackSound;
@@ -62,11 +62,8 @@ public class PlayerContoroller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (AttackTRGAni)
-        {
-            AttackTRGAni = false;
-        }
-
+        if (AttackTRGAni) AttackTRGAni = false;
+        
         if (AttackTRG && Time.time - lastAttackTime >= attackCooldown)
         {
             Attack();
@@ -121,7 +118,7 @@ public class PlayerContoroller : MonoBehaviour
 
         if (newVeiocity.sqrMagnitude > 0.2f)
         {
-            Quaternion toRotation = Quaternion.LookRotation(newVeiocity, Vector3.up);// 타겟 방향 설정
+            Quaternion toRotation = Quaternion.LookRotation(newVeiocity, Vector3.up);// 타겟 방향 설정 Vector3.up은 어디를 기준으로 돌꺼냐 라고 하는거임 우린 위를 기준으로 도는겨겨
             
             transform.rotation = Quaternion.Slerp( // Quaternion 함수는 유니티에서 물체를 회전시킬때 쓰는 함수
             transform.rotation, // 현재 회전 상태
@@ -157,12 +154,12 @@ public class PlayerContoroller : MonoBehaviour
         {
             jumpSoundSource.PlayOneShot(jumpSound); // 점프 소리나게 하기기
 
-            playerRigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            playerRigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);//Impulse는 힘을 어떻게 줄꺼냐 묻는거임 대충 힘차게라는 뜻(서서히, 평균적으로 이런식으로도 가능)
             isGrounded = false;
             jumpTrg = false;
         }
     }
-    public void JumpButton()
+    public void JumpButton() //모바일 실행시 실제 점프
     {
         if (isGrounded && !qTrigger)
         {
@@ -194,7 +191,7 @@ public class PlayerContoroller : MonoBehaviour
         hpSlider.value = currentHP;
         }
 
-        Debug.Log("대미지받음");
+        //Debug.Log("대미지받음");
         if (currentHP <= 0)
         {
             currentHP = 0;
@@ -227,14 +224,14 @@ public class PlayerContoroller : MonoBehaviour
 
         AttackTRGAni = true;
         AttackTRG = false;
-        Vector3 attackOrigin = transform.position + transform.forward *1.2f;
+        Vector3 attackOrigin = transform.position + transform.forward *1.2f; // 공격 기준점점
 
         attackSoundSource.PlayOneShot(attackSound); 
 
         Collider[] hitEnemies = Physics.OverlapSphere(attackOrigin, attackRange, enemyLayer); //공격범위 반원 생성 attackOrigin 부터  attackRange 까지enemyLayer놈을 가져와라라
 
-        foreach (Collider enemy in hitEnemies){ // 가져온 배열중 있으면 enemy라는 이름을 부여해서 뚜시뚜시
-            Debug.Log("Hit: " + enemy.name);
+        foreach (Collider enemy in hitEnemies){ // 가져온 배열중 있으면 enemy라는 이름을 부여해서 뚜시뚜시 foreach은 배열 for문임임
+           // Debug.Log("Hit: " + enemy.name);
             enemy.GetComponent<EnemyHP>()?.TakeDamage(damage);
         }
 
